@@ -12,9 +12,10 @@ class user_info(models.Model):
 
 class csv_file(models.Model):
     file_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(user_info,on_delete=models.CASCADE)
+    user_id = models.ForeignKey(user_info,on_delete=models.CASCADE, null=True)
     file_name = models.CharField(max_length=50,unique=True)
     file_save = models.CharField(max_length=50,unique=True)
+    session_key = models.CharField(max_length=50,null=True, blank=True)
 
 class analysis(models.Model):
     analysis_id = models.AutoField(primary_key=True)

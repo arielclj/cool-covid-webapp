@@ -1,5 +1,6 @@
-from django.http            import HttpResponseRedirect
+from django.contrib         import messages
 from django.shortcuts       import render, redirect
+from django.urls            import reverse
 from django.views           import View
 from datetime               import datetime
 
@@ -123,13 +124,22 @@ class Upload( View ):
 
     def post( self,request ):
         result = {}
-        csv_file = request.FILES["csv_file"]
+        if "csv_file" not in request.FILES:
+            messages.error(request,"Select file to upload.")
+            return redirect('/upload/')
+            
+        uploaded_file = request.FILES["csv_file"]
         file_name = request.POST.get("name")
+
+        duplicate_dataset_count = csv_file.objects.filter(file_name=file_name).count()
+        if duplicate_dataset_count > 0:
+            messages.error(request,"Type unique name. %s name is already used."%file_name)
+            return redirect('/upload/')
 
         rand_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
         f = open(upload_path + file_save + ".csv", 'wb')
-        for chunk in csv_file.chunks():
+        for chunk in uploaded_file.chunks():
             f.write(chunk)
         f.close()
 
@@ -206,11 +216,15 @@ class Column_list( View ):
 
         subprocess.call(['utils/preprocess.sh', request.session['csv_save']])
 
-        user = user_info.objects.get(user_name=request.session['user'])
+        if request.user.is_authenticated():
+            user = user_info.objects.get(user_name=request.user.username)
+        else:
+            user = None
         new_file = csv_file(
             user_id=user,
             file_name=request.session['csv_name'],
             file_save=request.session['csv_save'],
+            session_key=request.session.session_key
         )
         new_file.save()
 

@@ -25,8 +25,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^', include('dashboard.urls')),
     url(r'^', include('favicon.urls')),
-    url(r'^api/v1',                 login_required(views.Api.as_view()), name='api'),
-    url(r'^dim/v1',                 login_required(views.Dim.as_view()), name='dim'),
+    url(r'^api/v1',                 views.Api.as_view(), name='api'),
+    url(r'^dim/v1',                 views.Dim.as_view(), name='dim'),
 ]
 
 urlpatterns += i18n_patterns(

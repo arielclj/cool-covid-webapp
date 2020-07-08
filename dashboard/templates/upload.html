@@ -37,9 +37,17 @@
         font-weight:bold;
     }
 </style>
+
 <div class="col-md-12">
 	<div>
-		<h2><b>{% trans "Upload" %}</b></h2><br />
+	<h2><b>{% trans "Upload" %}</b></h2><br />
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li style="color:red;">{{ message }}</li>
+	    {% endfor %}
+	</ul> 
+	{% endif %}
         <h2>Upload your file</h2>
         <form method="POST" enctype="multipart/form-data" action="./upload/">{% csrf_token %}
             <input type="file" name='csv_file' id="csv_file" accept='.csv' class="hidden"/>

@@ -137,9 +137,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 FAVICON_PATH = STATIC_URL + 'img/logo.png'
 
-LOGIN_URL           = '/login/'
-LOGIN_REDIRECT_URL = '/en/'
-LOGOUT_REDIRECT_URL = '/en/'
-# LOGIN_REDIRECT_URL = '/cn/'
-# LOGOUT_REDIRECT_URL = '/cn/'
-
+LOGIN_URL           = '/en/login/'
+LOGIN_REDIRECT_URL = '/en/dashboard/'
+LOGOUT_REDIRECT_URL = '/en/login/'
+# LOGIN_REDIRECT_URL = '/cn/dashboard/'
+# LOGOUT_REDIRECT_URL = '/cn/login/'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

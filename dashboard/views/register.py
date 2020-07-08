@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 # coding=utf-8
 from django.contrib.auth.models import User
 from django import forms
+from dashboard.models import user_info
 
 class RegisterForm(forms.Form):
     username = forms.CharField(
@@ -75,14 +76,14 @@ class RegisterForm(forms.Form):
 class Register(FormView):
     template_name = 'registration/register.html'
     form_class = RegisterForm
-    success_url = '/'
+    success_url = '/en/dashboard/'
 
     def form_valid(self, form):
         form.save()
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
+        user_info.objects.create(user_name=username)
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return super(Register, self).form_valid(form)
-
 

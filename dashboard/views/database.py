@@ -2,7 +2,7 @@ from django.shortcuts       import render, redirect
 from django.views           import View
 
 from dashboard.models import *
-import shutil, os, yaml
+import shutil, os, yaml, uuid
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 upload_path = "upload/"
@@ -11,11 +11,15 @@ data_path = "cohana/"
 class Database(View):
     def get(self, request):
         result = {}
-        user = user_info.objects.get(user_name=request.session['user'])
-        files = csv_file.objects.filter(user_id=user)
-        if files.exists():
-            result['files'] = {}
-            for index, file in enumerate(files):
+        if request.user.is_authenticated():
+            user = user_info.objects.get(user_name=request.user.username)
+            files = csv_file.objects.filter(user_id=user)
+        else:
+            files = csv_file.objects.filter(session_key=request.session.session_key)
+
+        result['files'] = {}
+        for index, file in enumerate(files):
+            if os.path.exists(data_path + '/%s/table.yaml' % file.file_save):
                 result['files'][index] = {
                     "index": index + 1,
                     "file_name": file.file_name,
@@ -32,10 +36,8 @@ class Database(View):
         if file_operation == "delete":
             if csv_file.objects.filter(file_save=file_save).exists():
                 csv_file.objects.filter(file_save=file_save).delete()
-                if os.path.exists(data_path + file_save):
-                    shutil.rmtree(data_path + file_save)
-                if os.path.exists(upload_path + file_save + ".csv"):
-                    os.remove(upload_path + file_save + ".csv")
+                shutil.rmtree(data_path + file_save)
+                os.remove(upload_path + file_save + ".csv")
 
             return redirect("/database")
         else:

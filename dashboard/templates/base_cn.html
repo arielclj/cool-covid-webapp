@@ -95,12 +95,15 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    {{request.user.username}}
-                    <span class=" fa fa-angle-down"></span>
+                    {% if request.user.is_authenticated %}
+                    {{request.user.username}} <span class=" fa fa-angle-down"></span>
+                    {% else %}guest_user{% endif %}
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                     <li><a href="/changeLang"></i> 中文／English</a></li>
+                     {% if request.user.is_authenticated %}
                     <li><a href="/logout"><i class="fa fa-sign-out pull-right"></i> 退出</a></li>
+                     {% endif %}
                   </ul>
                 </li>
 
