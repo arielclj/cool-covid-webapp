@@ -94,7 +94,7 @@
                   aria-expanded="false">
                   {% if request.user.is_authenticated %}
                   {{request.user.username}} <span class=" fa fa-angle-down"></span>
-                  {% else %}guest_user{% endif %}
+                  {% else %}Guest{% endif %}
                 </a>
                 {% if request.user.is_authenticated %}
                 <ul class="dropdown-menu dropdown-usermenu pull-right">

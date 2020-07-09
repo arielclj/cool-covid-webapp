@@ -97,7 +97,7 @@
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     {% if request.user.is_authenticated %}
                     {{request.user.username}} <span class=" fa fa-angle-down"></span>
-                    {% else %}guest_user{% endif %}
+                    {% else %}Guest{% endif %}
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                     <li><a href="/changeLang"></i> 中文／English</a></li>

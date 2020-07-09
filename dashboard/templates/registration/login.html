@@ -42,7 +42,12 @@ body {
                     {% if form.errors %}
                     <p class="error">Sorry, that's not a valid username or password</p>
                     {% endif %}
-
+                    {% if request.user.is_authenticated %}
+                    <label>You are logged in!</label>
+                    <a href="/en/dashboard/" class="btn btn-default btn-block" role="button">Return to dashboard</a>
+                    <a href="/en/logout/" class="btn btn-default btn-block" role="button">Logout</a>
+                    {% else %}
+ 
                     <div class="form-group">
                         <label for="username">User ID</label>
                         <input type="text" class="form-control" name="username" value="" id="username" placeholder="Enter ID" required>
@@ -52,15 +57,19 @@ body {
                         <label for="password">Password</label>
                         <input type="password" class="form-control" name="password" value="" id="password" placeholder="Password" required>
                     </div>
-
+                    
+                    
 
                     <button type="submit" class="btn btn-info btn-block">Login</button>
+<br>
+                    <label>For first time users</label>
+                    <a href="/en/dashboard/" class="btn btn-info btn-block" role="button">Enter as guest</a>
                     <a href="/register/" class="btn btn-default btn-block" role="button">Register</a>
-
+                    
 
                     <!--<a href="{ url 'custom_password_reset' }" class="pull-right">Forgot Password</a>-->
                     <input type="hidden" name="next" value="{{ next|escape }}">
-
+                    {% endif %}
                 </div>
                 <br>
                 <br>
