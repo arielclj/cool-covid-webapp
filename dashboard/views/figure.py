@@ -10,8 +10,13 @@ data_path = "cohana/"
 class Figure(View):
     def get(self, request):
         result = {}
-        user = user_info.objects.get(user_name=request.session['user'])
-        files = csv_file.objects.filter(user_id=user)
+
+        if request.user.is_authenticated():
+            user = user_info.objects.get(user_name=request.user.username)
+            files = csv_file.objects.filter(user_id=user)
+        else:
+            files = csv_file.objects.filter(session_key=request.session.session_key)
+
         count = 0
         if files.exists():
             for file in files:
