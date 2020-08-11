@@ -23,18 +23,21 @@ class Figure(View):
                 alys = analysis.objects.filter(file_id=file)
                 if alys.exists():
                     for aly in alys:
-                        with open(data_path + "%s/%s.dat" % (file.file_save, aly.analysis_save)) as f:
-                            data = json.load(f)
-                        if aly.analysis_type == "RETENTION":
+                        try:
+                            with open(data_path + "%s/%s.dat" % (file.file_save, aly.analysis_save)) as f:
+                                data = json.load(f)
+                            if aly.analysis_type == "RETENTION":
 
-                            result[count] = self.to_line(data)
-                            result[count]['title'] = aly.analysis_name + "(line map)"
-                            result[count]['type'] = "line"
-                            count += 1
-                            result[count] = self.to_heatmap(data)
-                            result[count]['title'] = aly.analysis_name + "(heat map)"
-                            result[count]['type'] = "heatmap"
-                            count += 1
+                                result[count] = self.to_line(data)
+                                result[count]['title'] = aly.analysis_name + "(line map)"
+                                result[count]['type'] = "line"
+                                count += 1
+                                result[count] = self.to_heatmap(data)
+                                result[count]['title'] = aly.analysis_name + "(heat map)"
+                                result[count]['type'] = "heatmap"
+                                count += 1
+                        except:
+                            result = {}
 
         return render(request, "figure.html", {"figures": result})
 
